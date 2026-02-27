@@ -1,5 +1,3 @@
-# ECU-Tuning-Calculator
-Un calculator web interactiv pentru estimarea performanțelor (Cai Putere și Newton Metru) în urma unui tuning Stage 1 pentru diverse modele de mașini.Poate fi folosit și ca un site pentru o firmă care se ocupă de ECU tuning.Acest site urmează să fie periodic modificat și actualizat.
 # ECU Tuning & Remapping Estimator 🚗⚡
 
 ⚠️ **Status Proiect:** *În dezvoltare activă (Work in Progress). Acest site primește actualizări constante, obiectivul principal fiind transformarea lui dintr-un simplu calculator într-o platformă web completă, gata de a fi utilizată de o firmă reală de chiptuning.*
