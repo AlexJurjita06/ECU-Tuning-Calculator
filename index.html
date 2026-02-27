@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECU Tuning & Remapping Estimator</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Setări generale */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #0f0f0f 0%, #262626 100%); 
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+        
+        .container { 
+            width: 100%;
+            max-width: 900px; 
+            background: #ffffff; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- STILURI PENTRU PAGINA PRINCIPALĂ (HOME) --- */
+        .hero-image {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 { text-align: center; margin-top: 0; color: #111; font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px;}
+        .subtitle { text-align: center; color: #666; font-size: 18px; margin-bottom: 30px;}
+        
+        /* Zona centrală de căutare - Micșorată și centrată */
+        .search-area {
+            background: #f8f9fa;
+            padding: 25px 20px;
+            border-radius: 12px;
+            border: 2px dashed #d1d1d1;
+            margin: 0 auto 40px auto;
+            max-width: 480px; 
+            text-align: center;
+            transition: 0.3s;
+        }
+        .search-area:hover { border-color: #d32f2f; background: #fff; box-shadow: 0 10px 25px rgba(211,47,47,0.05); }
+        .search-area h3 { margin-top: 0; color: #333; margin-bottom: 15px; font-size: 18px;}
+        
+        input, button { 
+            padding: 12px; 
+            width: 100%; 
+            font-size: 15px; 
+            border-radius: 8px;
+            border: 1px solid #d1d1d1;
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus { border-color: #d32f2f; outline: none; box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15); }
+        
+        .btn-primary {
+            background-color: #d32f2f; 
+            color: white;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-primary:hover { background-color: #b71c1c; transform: translateY(-3px); box-shadow: 0 8px 15px rgba(183, 28, 28, 0.3);}
+        
+        /* Articol Educativ Grid */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .edu-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            border-top: 4px solid #d32f2f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: 0.3s;
+        }
+        .edu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .edu-card:first-child { grid-column: 1 / -1; background: #fafafa; border-top-color: #222;} 
+        
+        .edu-card h4 { margin-top: 0; color: #111; font-size: 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .edu-card h4 i { color: #d32f2f; font-size: 22px; }
+        .edu-card p { margin: 0; color: #555; font-size: 15px; text-align: justify; }
+
+        /* Footer cu iconițe colorate pe pagina principală */
+        .home-footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .home-footer p { font-weight: 600; color: #555; margin-bottom: 15px;}
+        
+        /* CLASE PENTRU CULORI SOCIAL MEDIA */
+        .social-links a { font-size: 40px; margin: 0 20px; text-decoration: none; transition: 0.3s; display: inline-block; }
+        .social-links a:hover { transform: scale(1.15) translateY(-3px); }
+        
+        /* Culoarea Oficială LinkedIn */
+        .icon-linkedin { color: #0077b5; }
+        
+        /* Gradientul Oficial Instagram */
+        .icon-instagram {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- STILURI PENTRU PAGINA DE REZULTATE --- */
+        .btn-back {
+            background: transparent;
+            color: #555;
+            border: 2px solid #ddd;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: #f4f4f4; color: #111; border-color: #aaa; transform: translateX(-3px); }
+
+        #carImage { width: 100%; max-height: 450px; object-fit: cover; border-radius: 12px; margin: 20px 0; display: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .power-stats { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+        .power-box { background: #f8f9fa; padding: 20px; border-radius: 12px; flex: 1; min-width: 250px; text-align: center; border: 1px solid #eee;}
+        .power-box p { margin: 5px 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;}
+        .power-box .values { font-size: 28px; font-weight: 800; font-family: 'Montserrat', sans-serif; margin-top: 10px; }
+        
+        .warnings { color: #d9534f; margin-top: 30px; background: #fff3f3; padding: 20px; border-radius: 10px; border-left: 5px solid #d9534f;}
+        .warnings h4 { margin-top: 0; margin-bottom: 15px; font-size: 18px;}
+        .warnings li { margin-bottom: 8px; }
+        
+        .contact-section { margin-top: 40px; padding-top: 30px; border-top: 2px solid #f0f0f0; text-align: center;}
+        .booking-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #27ae60; color: white; padding: 18px 40px; font-size: 18px; font-weight: 700;
+            border-radius: 50px; margin-top: 15px; width: auto; border: none; transition: 0.3s; cursor: pointer;
+        }
+        .booking-btn:hover { background-color: #219150; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);}
+        
+        #hiddenContactInfo { display: none; margin-top: 30px; background: #fafafa; padding: 30px; border-radius: 16px; border: 1px solid #eaeaea; }
+        .contact-details p { font-size: 18px; margin: 15px 0; font-weight: 600; color: #222;}
+        .btn-show-phone { background-color: #444; color: white; padding: 8px 16px; font-size: 14px; border-radius: 6px; width: auto; margin-left: 10px; border: none; cursor: pointer; transition: 0.3s;}
+        .btn-show-phone:hover { background-color: #111; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUP { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 28px; }
+            .power-stats { flex-direction: column; }
+            .search-area { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="homeView">
+        <img src="https://i.pinimg.com/236x/f7/78/3d/f7783d071753f894b8dd805adeb72d68.jpg?nii=t" alt="Atelier STX Tuning" class="hero-image">
+        
+        <div class="profile-header">
+            <h1>Estimator Stage 1 Tuning</h1>
+            <p class="subtitle">Află potențialul real al mașinii tale printr-o resoftare profesională.</p>
+        </div>
+        
+        <div class="search-area">
+            <h3>Selectează mașina pentru estimare:</h3>
+            <input type="text" id="carSearch" list="carList" placeholder="🔍 Ex: Renault, BMW, VW...">
+            <datalist id="carList"></datalist>
+            <button class="btn-primary" onclick="calculateTuning()"><i class="fas fa-bolt"></i> Calculează Performanța</button>
+        </div>
+
+        <div class="edu-grid">
+            <div class="edu-card">
+                <h4><i class="fas fa-microchip"></i> 1. Ce este, de fapt, un ECU?</h4>
+                <p>Fiecare mașină modernă este controlată de un computer central numit ECU (Engine Control Unit). Acesta acționează ca „creierul” vehiculului, gestionând parametri critici precum cantitatea de combustibil injectată, presiunea turbinei și momentul aprinderii. Producătorii auto programează acest computer cu setări conservatoare, lăsând o marjă generoasă de siguranță pentru a compensa întreținerea deficitară, combustibilul de calitate slabă sau condițiile climatice extreme. Tuning-ul reprezintă recalibrarea acestor hărți software pentru a debloca potențialul latent al motorului.</p>
+            </div>
+            <div class="edu-card">
+                <h4><i class="fas fa-laptop-code"></i> 2. Procesul de Remapare</h4>
+                <p>Cea mai comună formă de tuning este Stage 1, care presupune modificarea software-ului original fără a schimba piese mecanice. Rezultatul este o livrare mai eficientă a puterii și a cuplului. În termeni simpli, motorul „învață” să respire mai bine și să ardă combustibilul eficient.</p>
+            </div>
+            <div class="edu-card">
+                <h4><i class="fas fa-tachometer-alt"></i> 3. Dincolo de Caii Putere</h4>
+                <p>Deși obiectivul principal este creșterea puterii (CP), remaparea aduce și un plus considerabil de cuplu motor (Nm). În urma unei remapări corecte, consumul de carburant poate chiar să scadă ușor la un stil de mers constant, deoarece motorul depune mai puțin efort.</p>
+            </div>
+            <div class="edu-card">
+                <h4><i class="fas fa-shield-alt"></i> 4. Fiabilitatea și Riscurile</h4>
+                <p>Tuning-ul profesional este sigur atâta timp cât se respectă limitele mecanice ale componentelor. Este esențial ca remaparea să fie făcută personalizat pentru starea tehnică a mașinii tale, nu prin instalarea unui fișier generic descărcat de pe internet.</p>
+            </div>
+            <div class="edu-card">
+                <h4><i class="fas fa-tools"></i> 5. Mentenanța Post-Tuning</h4>
+                <p>Odată ce mașina are mai multă putere, trebuie să fii mai riguros cu întreținerea: schimb de ulei la maxim 8.000 - 10.000 km, combustibil premium și evitarea forțării motorului rece. Tuning-ul nu strică mașina, ci neglijența în exploatare.</p>
+            </div>
+        </div>
+
+        <div class="home-footer">
+            <p>Urmărește-mă pe rețelele sociale:</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/alexandru.j1/" target="_blank" title="Instagram"><i class="fab fa-instagram icon-instagram"></i></a>
+                
+                <a href="https://www.linkedin.com/in/alexandru-daniel-jurjița-a255863b2" target="_blank" title="LinkedIn"><i class="fab fa-linkedin icon-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultsView" style="display: none; animation: fadeInUP 0.5s ease-out forwards;">
+        <button class="btn-back" onclick="goBack()"><i class="fas fa-arrow-left"></i> Înapoi la pagina principală</button>
+
+        <h3 id="carTitle" style="margin-top: 0; text-align: center; font-size: 28px; color: #111;"></h3>
+        <img id="carImage" src="" alt="Imagine Mașină">
+        
+        <div class="power-stats">
+            <div class="power-box">
+                <p>Configurație Stock</p>
+                <p class="values"><span id="stockHP"></span> CP / <span id="stockNM"></span> NM</p>
+            </div>
+            <div class="power-box" style="background: #fff0f0; border-color: #ffcdd2;">
+                <p style="color: #d32f2f;"><i class="fas fa-fire" style="margin-right: 5px;"></i> Potențial Stage 1</p>
+                <p class="values" style="color: #d32f2f;"><span id="tunedHP"></span> CP / <span id="tunedNM"></span> NM</p>
+            </div>
+        </div>
+
+        <div class="warnings">
+            <h4><i class="fas fa-exclamation-triangle"></i> Recomandări vitale post-tuning:</h4>
+            <ul id="warningList" style="margin-bottom: 0;"></ul>
+        </div>
+
+        <div class="contact-section">
+            <h3 style="font-size: 24px; font-weight: 800;">Ești gata pentru un upgrade?</h3>
+            <button class="booking-btn" id="revealContactBtn" onclick="showContactInfo()">
+                <i class="fas fa-calendar-check"></i> Programează-te acum
+            </button>
+
+            <div id="hiddenContactInfo">
+                <div class="contact-details">
+                    <p><i class="fas fa-phone-alt" style="color:#d32f2f;"></i> Telefon: <span id="phoneNumber">0747 *** ***</span> 
+                        <button class="btn-show-phone" id="showPhoneBtn" onclick="revealPhone()">Afișare număr</button>
+                    </p>
+                    <p><i class="fas fa-envelope" style="color:#d32f2f;"></i> Email: <a href="mailto:alexandru.jurjita2006@gmail.com" style="color: #d32f2f; text-decoration: none;">alexandru.jurjita2006@gmail.com</a></p>
+                </div>
+                <div class="social-links" style="margin-top: 25px;">
+                    <a href="https://www.instagram.com/alexandru.j1/" target="_blank" title="Instagram"><i class="fab fa-instagram icon-instagram"></i></a>
+                    <a href="www.linkedin.com/in/alexandru-daniel-jurjița-a255863b2" target="_blank" title="LinkedIn"><i class="fab fa-linkedin icon-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="cars.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
