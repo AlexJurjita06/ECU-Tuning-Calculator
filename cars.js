@@ -687,8 +687,8 @@ const carDatabase = [
         model: "Seria 7 F01 730d (N57)",
         stockHP: 245,
         stockNM: 540,
-        tunedHP: "300 - 310",
-        tunedNM: "620 - 640",
+        tunedHP: "290 - 300",
+        tunedNM: "600 - 610",
         imageUrl: "https://images.caradisiac.com/logos-ref/modele/modele--bmw-serie-7-f01/S0-modele--bmw-serie-7-f01.jpg",
         warnings: ["Distribuția pe lanț la motorul N57 trebuie verificată/schimbată preventiv.", "Clapetele swirl de pe galeria de admisie se pot rupe.", "Atenție la pompa de înaltă presiune (CP4) care este sensibilă la calitatea motorinei."]
     },
@@ -747,5 +747,6 @@ const carDatabase = [
         imageUrl: "https://cdn.motor1.com/images/mgl/v3JnQ/s1/renault-laguna-coupe-monaco-gp-racing.jpg",
         warnings: ["Motor aspirat natural (VQ35DE - de proveniență Nissan), câștigurile de putere din soft sunt relativ mici.", "Atenție la consumul de ulei la turații ridicate și la etanșeitatea capacelor de culbutori.", "Termostatul și bobinele de inducție pot ceda odată cu vârsta."]
     }
+
 
 ];
