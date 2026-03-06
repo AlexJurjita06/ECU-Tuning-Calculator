@@ -82,23 +82,25 @@ function scrollToEdu(id) {
 
 // ========== ORIGINAL APP LOGIC ==========
 window.onload = function() {
-    const dataListElement = document.getElementById("carList");
-    const searchInput = document.getElementById("carSearch");
+    var dataListElement = document.getElementById("carList");
+    var searchInput = document.getElementById("carSearch");
     
-    // Populăm lista de căutare din baza de date
-    carDatabase.forEach(car => {
-        let option = document.createElement("option");
-        option.value = `${car.brand} ${car.model} (${car.stockHP} CP)`;
-        dataListElement.appendChild(option);
-    });
+    if (dataListElement && searchInput && typeof carDatabase !== 'undefined') {
+        // Populăm lista de căutare din baza de date
+        carDatabase.forEach(car => {
+            let option = document.createElement("option");
+            option.value = `${car.brand} ${car.model} (${car.stockHP} CP)`;
+            dataListElement.appendChild(option);
+        });
 
-    // Permite apăsarea tastei Enter
-    searchInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); 
-            calculateTuning(); 
-        }
+        // Permite apăsarea tastei Enter
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); 
+                calculateTuning(); 
+            }
     });
+    }
 };
 
 function calculateTuning() {
@@ -165,6 +167,19 @@ function goBack() {
     
     // Facem scroll elegant la zona de căutare
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --- NAVIGARE LA RECENZII ---
+function navigateToReviews() {
+    toggleSidebar();
+    var resultsView = document.getElementById("resultsView");
+    var homeView = document.getElementById("homeView");
+    if (resultsView) resultsView.style.display = "none";
+    if (homeView) homeView.style.display = "block";
+    setTimeout(function() {
+        var section = document.querySelector('.reviews-section');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
 }
 
 // --- FUNCȚIILE DE CONTACT ---
@@ -292,6 +307,43 @@ function renderReviews() {
             (r.text ? '<p class="review-item-text">' + sanitize(r.text) + '</p>' : '');
         list.appendChild(div);
     });
+
+    // Also render in sidebar
+    renderSidebarReviews(reviews, avg);
+    updateSidebarAvg();
+}
+
+function renderSidebarReviews(reviews, avg) {
+    var container = document.getElementById('sidebarReviewsContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (reviews.length === 0) {
+        container.innerHTML = '<p class="sidebar-no-reviews">Nicio recenzie inca.</p>';
+        return;
+    }
+
+    // Average bar
+    var avgHtml = '<div class="sidebar-review-avg">' +
+        '<div class="sidebar-review-avg-num">' + avg + '</div>' +
+        '<div><div class="sidebar-review-avg-stars">' + renderStars(Math.round(parseFloat(avg))) + '</div>' +
+        '<div class="sidebar-review-avg-count">' + reviews.length + (reviews.length === 1 ? ' recenzie' : ' recenzii') + '</div></div></div>';
+
+    var listHtml = '<div class="sidebar-reviews-scroll">';
+    reviews.slice().reverse().forEach(function(r) {
+        var initials = r.name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+        listHtml += '<div class="sidebar-review-item">' +
+            '<div class="sidebar-review-header">' +
+                '<div class="sidebar-review-name"><span class="sr-avatar">' + sanitize(initials) + '</span>' + sanitize(r.name) + '</div>' +
+                '<div><span class="sidebar-review-stars">' + renderStars(r.rating) + '</span></div>' +
+            '</div>' +
+            (r.text ? '<p class="sidebar-review-text">' + sanitize(r.text) + '</p>' : '') +
+            '<div class="sidebar-review-date">' + sanitize(r.date) + '</div>' +
+        '</div>';
+    });
+    listHtml += '</div>';
+
+    container.innerHTML = avgHtml + listHtml;
 }
 
 function submitReview() {
@@ -332,3 +384,21 @@ function submitReview() {
 
 // Initial render on page load
 renderReviews();
+updateSidebarAvg();
+
+// ========== SIDEBAR AVG BADGE ==========
+function updateSidebarAvg() {
+    var badge = document.getElementById('sidebarAvgBadge');
+    if (!badge) return;
+    var reviews = getReviews();
+    if (reviews.length === 0) {
+        badge.innerHTML = '';
+        badge.style.display = 'none';
+        return;
+    }
+    var total = reviews.reduce(function(sum, r) { return sum + r.rating; }, 0);
+    var avg = (total / reviews.length).toFixed(1);
+    badge.style.display = 'inline-flex';
+    badge.innerHTML = '<i class="fas fa-star" style="font-size:9px;"></i> ' + avg + '/5';
+}
+
