@@ -89,6 +89,46 @@
             transition: max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.3s; padding: 0;
         }
         .sidebar-section-content.open { max-height: 600px; padding: 14px 0 6px; }
+        .sidebar-section-content.open.sidebar-reviews-content { max-height: 70vh; }
+        .sidebar-reviews-scroll {
+            max-height: 55vh; overflow-y: auto; padding-right: 6px;
+        }
+        .sidebar-reviews-scroll::-webkit-scrollbar { width: 3px; }
+        .sidebar-reviews-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .sidebar-review-item {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+        }
+        .sidebar-review-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
+        }
+        .sidebar-review-name {
+            font-weight: 700; color: #fff; font-size: 13px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .sidebar-review-name .sr-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: linear-gradient(135deg, #d32f2f, #ff5252);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800; color: #fff;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .sidebar-review-stars { color: #f4b400; font-size: 12px; letter-spacing: 1px; }
+        .sidebar-review-date { color: #555; font-size: 11px; }
+        .sidebar-review-text { color: #999; font-size: 13px; line-height: 1.55; margin: 0; }
+        .sidebar-review-avg {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 14px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .sidebar-review-avg-num {
+            font-family: 'Montserrat', sans-serif; font-size: 28px;
+            font-weight: 900; color: #fff; line-height: 1;
+        }
+        .sidebar-review-avg-stars { color: #f4b400; font-size: 14px; }
+        .sidebar-review-avg-count { color: #666; font-size: 11px; margin-top: 2px; }
+        .sidebar-no-reviews { color: #555; font-size: 13px; text-align: center; padding: 20px 0; }
         .schedule-table { width: 100%; border-collapse: collapse; }
         .schedule-table tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
         .schedule-table td { padding: 10px 0; font-size: 14px; color: #bbb; }
@@ -124,6 +164,14 @@
         .sidebar-social { display: flex; gap: 18px; margin-top: 8px; }
         .sidebar-social a { font-size: 26px; text-decoration: none; transition: 0.3s; display: inline-block; }
         .sidebar-social a:hover { transform: scale(1.15); }
+        .sidebar-avg-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(244,180,0,0.12); color: #f4b400;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-track { background: transparent; }
         .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
@@ -581,7 +629,7 @@
 <nav class="navbar">
     <div class="navbar-brand">
         <div class="brand-icon"><i class="fas fa-bolt"></i></div>
-        <span>AJ Performance</span>
+        <span>AJ Performance Tuning</span>
     </div>
     <button class="hamburger" id="hamburgerBtn" aria-label="Meniu">
         <span></span><span></span><span></span>
@@ -610,7 +658,7 @@
         <div class="sidebar-section-title" onclick="toggleAccordion(this)"><span><i class="fas fa-users" style="margin-right:6px;"></i> Despre Noi</span> <i class="fas fa-chevron-down accordion-arrow"></i></div>
         <div class="sidebar-section-content">
             <div class="sidebar-despre-item" onclick="toggleSubText(this)"><i class="fas fa-id-badge item-icon"></i><span>Cine suntem</span><i class="fas fa-chevron-down sub-arrow"></i></div>
-            <div class="sidebar-sub-text">AJ Performance este un atelier specializat in remaparea ECU si optimizarea performantelor auto. Punem accent pe calitate, personalizare si transparenta. Fiecare masina este tratata individual, cu soft scris pe banca de teste, nu fisiere generice. Pasiunea pentru motoare si tehnologie ne defineste.</div>
+            <div class="sidebar-sub-text">AJ Performance Tuning este un atelier specializat in remaparea ECU si optimizarea performantelor auto. Punem accent pe calitate, personalizare si transparenta. Fiecare masina este tratata individual, cu soft scris pe banca de teste, nu fisiere generice. Pasiunea pentru motoare si tehnologie ne defineste.</div>
             <div class="sidebar-despre-item" onclick="toggleSubText(this)"><i class="fas fa-tag item-icon"></i><span>Tarife</span><i class="fas fa-chevron-down sub-arrow"></i></div>
             <div class="sidebar-sub-text">Pretul pentru o remapare Stage 1 porneste de la <span class="sidebar-price-tag">150 EUR</span>, in functie de marca, modelul si tipul motorului. Pretul include diagnoza pre-tuning, scrierea softului personalizat si testarea finala. Pentru detalii exacte, contacteaza-ne cu datele masinii tale.</div>
             <div class="sidebar-despre-item" onclick="toggleSubText(this)"><i class="fas fa-clock item-icon"></i><span>Program de lucru</span><i class="fas fa-chevron-down sub-arrow"></i></div>
@@ -628,6 +676,15 @@
             </div>
             <div class="sidebar-despre-item" onclick="toggleSubText(this)"><i class="fas fa-map-marker-alt item-icon"></i><span>Locatie</span><i class="fas fa-chevron-down sub-arrow"></i></div>
             <div class="sidebar-sub-text"><div class="sidebar-info-row"><i class="fas fa-map-pin"></i><div><strong>Strada Dunarii nr. 1</strong><br>Ineu, jud. Arad, Romania</div></div></div>
+        </div>
+    </div>
+    <div class="sidebar-section">
+        <div class="sidebar-section-title sidebar-reviews-link" onclick="navigateToReviews()">
+            <span><i class="fas fa-star" style="margin-right:6px;"></i> Recenzii Clienti</span>
+            <span style="display:flex;align-items:center;gap:8px;">
+                <span class="sidebar-avg-badge" id="sidebarAvgBadge"></span>
+                <i class="fas fa-arrow-right accordion-arrow"></i>
+            </span>
         </div>
     </div>
     <div class="sidebar-section">
@@ -775,7 +832,7 @@
             <iframe
                 src="https://maps.google.com/maps?q=46.4263125,21.833745&z=17&ie=UTF8&iwloc=&output=embed"
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                title="Locatie AJ Performance - Strada Dunarii nr. 1, Ineu, 315300, Arad">
+                title="Locatie AJ Performance Tuning - Strada Dunarii nr. 1, Ineu, 315300, Arad">
             </iframe>
             <div class="map-info-bar">
                 <div class="map-address">
@@ -795,7 +852,7 @@
             <a href="https://www.instagram.com/alexandru.j1/" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram icon-instagram"></i></a>
             <a href="https://www.linkedin.com/in/alexandru-daniel-jurji%C8%9Ba-a255863b2" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin icon-linkedin"></i></a>
         </div>
-        <p class="footer-copy">AJ Performance &mdash; Strada Dunarii nr. 1, Ineu, jud. Arad</p>
+        <p class="footer-copy">AJ Performance Tuning &mdash; Strada Dunarii nr. 1, Ineu, jud. Arad</p>
     </footer>
 
 </div>
